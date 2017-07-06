@@ -241,10 +241,10 @@ auto shader_path(GLenum t, const boost::filesystem::path& p) {
 	return shader(t, str.c_str());
 }
 
-auto vertex			= std::bind(shader,			 GL_VERTEX_SHADER,   std::placeholders::_1);
-auto fragment		= std::bind(shader,			 GL_FRAGMENT_SHADER, std::placeholders::_1);
-auto geometry		= std::bind(shader,			 GL_GEOMETRY_SHADER, std::placeholders::_1);
-auto vertex_f		= std::bind(shader_path, GL_VERTEX_SHADER,	 std::placeholders::_1);
+auto vertex     = std::bind(shader,      GL_VERTEX_SHADER,   std::placeholders::_1);
+auto fragment   = std::bind(shader,      GL_FRAGMENT_SHADER, std::placeholders::_1);
+auto geometry   = std::bind(shader,      GL_GEOMETRY_SHADER, std::placeholders::_1);
+auto vertex_f   = std::bind(shader_path, GL_VERTEX_SHADER,   std::placeholders::_1);
 auto fragment_f = std::bind(shader_path, GL_FRAGMENT_SHADER, std::placeholders::_1);
 auto geometry_f = std::bind(shader_path, GL_GEOMETRY_SHADER, std::placeholders::_1);
 
