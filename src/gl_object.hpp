@@ -19,22 +19,22 @@ namespace helper {
 			typedef GLuint pointer;
 			void operator()(GLuint id) { func(id); }
 		};
-		
+
 		template <typename T> class obj_t  {
-		protected:
-			typedef T ptr_type;
-			ptr_type ptr;
-			
-		public:
-			obj_t<T>& operator =(GLuint id) {
-				ptr.reset();
-				ptr = ptr_type(id);
-				return *this;
-			}
-			
-			operator GLuint() {
-				return ptr.get();
-			}
+			protected:
+				typedef T ptr_type;
+				ptr_type ptr;
+
+			public:
+				obj_t<T>& operator =(GLuint id) {
+					ptr.reset();
+					ptr = ptr_type(id);
+					return *this;
+				}
+
+				operator GLuint() {
+					return ptr.get();
+				}
 		};
 	}
 }

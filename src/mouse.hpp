@@ -32,81 +32,81 @@ enum mousecode_t {
 class mouse_manager {
 	std::array<bool,     10> state			 = { { false } };
 	std::array<uint32_t, 10> down_tick = { { 0 } },
-													 up_tick		 = { { 0 } };
+		up_tick		 = { { 0 } };
 	glm::vec2 _pos, _rel, _wheel;
 	bool inverted_y = false;
-	
-public:
+
+	public:
 	auto link_event_manager(event_manager& em) {
 		em.mouse_button_down = [&](const SDL_MouseButtonEvent& e) {
 			state[e.button] = true;
 		};
-		
+
 		em.mouse_button_up = [&](const SDL_MouseButtonEvent& e) {
 			state[e.button] = false;
 		};
-		
+
 		em.mouse_motion = [&](const SDL_MouseMotionEvent& e) {
 			_pos.x = static_cast<float>(e.x);
 			_pos.y = static_cast<float>(e.y);
 			_rel.x = static_cast<float>(e.xrel);
 			_rel.y = static_cast<float>(inverted_y ? e.yrel : -e.yrel);
 		};
-		
+
 		em.mouse_wheel = [&](const SDL_MouseWheelEvent& e) {
 			_wheel.x = static_cast<float>(e.x);
 			_wheel.y = static_cast<float>(e.y);
 		};
 	}
-	
+
 	auto is_mouse_down(const mousecode_t& button) {
 		return state[button] == true;
 	}
-	
+
 	auto is_mouse_up(const mousecode_t& button) {
 		return state[button] == false;
 	}
-	
+
 	auto mouse_down_tick(const mousecode_t& mouse) {
 		return down_tick[mouse];
 	}
-	
+
 	auto mouse_up_tick(const mousecode_t& mouse) {
 		return up_tick[mouse];
 	}
-	
+
 	auto ticks_since_mouse_down(const mousecode_t& mouse) {
 		return SDL_GetTicks() - down_tick[mouse];
 	}
-	
+
 	auto ticks_since_mouse_up(const mousecode_t& mouse) {
 		return SDL_GetTicks() - up_tick[mouse];
 	}
-	
+
 	auto toggle_inverted_y() {
 		inverted_y = not inverted_y;
 	}
-	
+
 	auto set_inverted_y(bool set_to) {
 		inverted_y = set_to;
 	}
-	
+
 	auto is_inverted_y() {
 		return inverted_y;
 	}
-	
+
 	auto& wheel() const {
 		return _wheel;
 	}
-	
+
 	auto& rel() const {
 		return _rel;
 	}
-	
+
 	auto& pos() const {
 		return _pos;
 	}
-	
+
 	auto reset() {
 		_wheel = { 0, 0 };
 		_rel   = { 0, 0 };

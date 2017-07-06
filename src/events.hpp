@@ -51,28 +51,28 @@ class event_manager {
 	EVENT(SDL_TEXTINPUT, text_input, text); \
 	EVENT(SDL_USEREVENT, user_event, user); \
 	EVENT(SDL_WINDOWEVENT, window_event, window);
-	
+
 public:
 #define EVENT(x, y, z) std::function<void(const decltype(SDL_Event::z) &)> y
-	SDL_EVENTS
+		SDL_EVENTS
 #undef EVENT
-	
-	auto poll() {
-		static SDL_Event e;
-		while (SDL_PollEvent(&e)) {
-			switch (e.type) {
+
+			auto poll() {
+				static SDL_Event e;
+				while (SDL_PollEvent(&e)) {
+					switch (e.type) {
 #define EVENT(x, y, z) \
-				case x: \
-					if (y) \
+						case x: \
+										if (y) \
 						y(e.z); \
-					break;
-				SDL_EVENTS
+						break;
+						SDL_EVENTS
 #undef EVENT
-    default:
-					break;
+						default:
+							break;
+					}
+				}
 			}
-		}
-	}
 };
 
 #endif /* inputs_h */

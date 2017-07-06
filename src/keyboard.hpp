@@ -260,57 +260,57 @@ enum keycode_t {
 class keyboard_manager {
 	std::array<bool,     SDL_NUM_SCANCODES> state     = { { false } };
 	std::array<uint32_t, SDL_NUM_SCANCODES> down_tick = { { 0 } },
-																					up_tick   = { { 0 } };
-	
-public:
+		up_tick   = { { 0 } };
+
+	public:
 	void link_event_manager(event_manager& em) {
 		em.key_down = [&](const SDL_KeyboardEvent& e) {
 			state[e.keysym.scancode]     = true;
 			down_tick[e.keysym.scancode] = e.timestamp;
 		};
-		
+
 		em.key_up = [&](const SDL_KeyboardEvent& e) {
 			state[e.keysym.scancode]   = false;
 			up_tick[e.keysym.scancode] = e.timestamp;
 		};
 	}
-	
+
 	auto is_key_down(const keycode_t& key) {
 		return state[key] == true;
 	}
-	
+
 	template<typename... T, typename=keycode_t> auto is_key_down_or(const T& ... keys) {
 		for (const auto& key: { keys... })
 			if (state[key])
 				return true;
-		
+
 		return false;
 	}
-	
+
 	template<typename... T, typename=keycode_t> auto is_key_down_and(const T& ... keys) {
 		for (const auto& key: { keys... })
 			if (not state[key])
 				return false;
-		
+
 		return true;
 	}
-	
+
 	auto is_key_up(const keycode_t& key) {
 		return state[key] == false;
 	}
-	
+
 	auto key_down_tick(const keycode_t& key) {
 		return down_tick[key];
 	}
-	
+
 	auto key_up_tick(const keycode_t& key) {
 		return up_tick[key];
 	}
-	
+
 	auto ticks_since_key_down(const keycode_t& key) {
 		return SDL_GetTicks() - down_tick[key];
 	}
-	
+
 	auto ticks_since_key_up(const keycode_t& key) {
 		return SDL_GetTicks() - up_tick[key];
 	}

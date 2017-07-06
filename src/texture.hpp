@@ -25,12 +25,12 @@ namespace helper {
 
 class texture_t: public helper::gl::obj_t<std::unique_ptr<GLuint, helper::gl::obj_deleter_t<helper::gl_delete_texture>>> {
 	int w, h, c;
-	
+
 public:
 	static auto done() {
 		glBindTexture(GL_TEXTURE_2D, 0);
 	}
-	
+
 	auto& create() {
 		GLuint id;
 		glGenTextures(1, &id);
@@ -38,74 +38,74 @@ public:
 		std::cout << "[LOG] Creating texture #" << *this << std::endl;
 		return *this;
 	}
-	
+
 	auto& bind() {
 		glBindTexture(GL_TEXTURE_2D, *this);
 		return *this;
 	}
-	
+
 	auto bind(const std::function<void()>& f) {
 		glBindTexture(GL_TEXTURE_2D, *this);
 		f();
 		glBindTexture(GL_TEXTURE_2D, 0);
 	}
-	
+
 	auto& load(const boost::filesystem::path& p) {
 		bind();
-		
+
 		if (not boost::filesystem::exists(p) or not boost::filesystem::is_regular_file(p))
 			throw std::runtime_error("texture path \"" + p.string() + "\" is not a file or doesn't exist");
-		
+
 		unsigned char* data = stbi_load(p.string().c_str(), &w, &h, &c, STBI_rgb_alpha);
 		if (data == nullptr)
 			throw std::runtime_error("Failed to load " + p.string());
-		
+
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
-		
+
 		stbi_image_free(data);
-		
+
 		return *this;
 	}
-	
+
 	auto& create(const boost::filesystem::path& p) {
 		create();
 		return load(p);
 	}
-	
+
 	auto& tex_params_i() {
 		return *this;
 	}
-	
+
 	auto& tex_params_f() {
 		return *this;
 	}
-	
+
 	template <typename T1=GLenum, typename T2=GLint, typename ... Ts> auto& tex_params_i(const T1& v1, const T2& v2, const Ts& ... vs) {
 		bind();
 		glTexParameteri(GL_TEXTURE_2D, v1, v2);
 		tex_params_i(vs...);
 		return *this;
 	}
-	
+
 	template <typename T1=GLenum, typename T2=GLfloat, typename ... Ts> auto& tex_params_f(const T1& v1, const T2& v2, const Ts& ... vs) {
 		bind();
 		glTexParameterf(GL_TEXTURE_2D, v1, v2);
 		tex_params_f(vs...);
 		return *this;
 	}
-	
+
 	template<typename T> auto& tex_params(GLenum, T);
-	
+
 	auto& mipmap() {
 		bind();
 		glGenerateMipmap(GL_TEXTURE_2D);
 		return *this;
 	}
-	
+
 	auto width() const {
 		return w;
 	}
-	
+
 	auto height() const {
 		return h;
 	}

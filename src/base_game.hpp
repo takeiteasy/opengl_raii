@@ -141,7 +141,7 @@ class game_t {
 		}
 	}
 
-	protected:
+protected:
 	window_t				 window;
 	event_manager		 events;
 	keyboard_manager keyboard;
@@ -151,12 +151,12 @@ class game_t {
 	float						 avg_fps, fps, cur_frame_ticks = .0f;
 	boost::filesystem::path assets = boost::filesystem::current_path() / "assets";
 	bool quit = false;
-  
-  GLuint plane_VAO;
-  program_t plane_shader;
-  glm::mat4 plane_model;
-  
-  program_t info_shader;
+
+	GLuint plane_VAO;
+	program_t plane_shader;
+	glm::mat4 plane_model;
+
+	program_t info_shader;
 
 public:
 	virtual void pre_init() {}
@@ -169,8 +169,8 @@ public:
 
 		init_check("SDL_Init()", SDL_Init(SDL_INIT_VIDEO) >= 0);
 		auto sdl = std::shared_ptr<std::nullptr_t>(nullptr, [](std::nullptr_t) {
-      SDL_Quit();
-    });
+				SDL_Quit();
+				});
 
 		SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
 		SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 2);
@@ -179,8 +179,8 @@ public:
 		window.bounds.x = c.width;
 		window.bounds.y = c.height;
 		proj.set_ratio(window.bounds);
-    view.look_at(glm::vec3(0.f, 1.5f, 3.f),
-                 glm::vec3(0.f, 1.f, 0.f));
+		view.look_at(glm::vec3(0.f, 1.5f, 3.f),
+				glm::vec3(0.f, 1.f, 0.f));
 
 		window.ptr = std::shared_ptr<SDL_Window>(SDL_CreateWindow("twwepdnutis",
 					SDL_WINDOWPOS_CENTERED,
@@ -239,59 +239,59 @@ public:
 
 		keyboard.link_event_manager(events);
 		mouse.link_event_manager(events);
-    
+
 #if !(defined(NO_GRID) && defined(NO_INFO))
-    float plane_vertices[] = {
-      1.f,  1.f, 0.0f,  1.0f, 1.0f,
-      1.f, -1.f, 0.0f,  1.0f, 0.0f,
-      -1.f, -1.f, 0.0f,  0.0f, 0.0f,
-      -1.f,  1.f, 0.0f,  0.0f, 1.0f
-    };
-    
-    unsigned int plane_indices[] = {
-      0, 1, 3,
-      1, 2, 3
-    };
-    
-    GLuint VBO, EBO;
-    glGenVertexArrays(1, &plane_VAO);
-    glGenBuffers(1, &VBO);
-    glGenBuffers(1, &EBO);
-    
-    glBindVertexArray(plane_VAO);
-    
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(plane_indices), plane_indices, GL_STATIC_DRAW);
-    
-    glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(plane_vertices), plane_vertices, GL_STATIC_DRAW);
-    
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
-    glEnableVertexAttribArray(0);
-    
-    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
-    glEnableVertexAttribArray(1);
-    
-    glBindVertexArray(0);
-    
-    glDeleteBuffers(1, &VBO);
-    glDeleteBuffers(1, &EBO);
+		float plane_vertices[] = {
+			1.f,  1.f, 0.0f,  1.0f, 1.0f,
+			1.f, -1.f, 0.0f,  1.0f, 0.0f,
+			-1.f, -1.f, 0.0f,  0.0f, 0.0f,
+			-1.f,  1.f, 0.0f,  0.0f, 1.0f
+		};
+
+		unsigned int plane_indices[] = {
+			0, 1, 3,
+			1, 2, 3
+		};
+
+		GLuint VBO, EBO;
+		glGenVertexArrays(1, &plane_VAO);
+		glGenBuffers(1, &VBO);
+		glGenBuffers(1, &EBO);
+
+		glBindVertexArray(plane_VAO);
+
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(plane_indices), plane_indices, GL_STATIC_DRAW);
+
+		glBindBuffer(GL_ARRAY_BUFFER, VBO);
+		glBufferData(GL_ARRAY_BUFFER, sizeof(plane_vertices), plane_vertices, GL_STATIC_DRAW);
+
+		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
+		glEnableVertexAttribArray(0);
+
+		glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
+		glEnableVertexAttribArray(1);
+
+		glBindVertexArray(0);
+
+		glDeleteBuffers(1, &VBO);
+		glDeleteBuffers(1, &EBO);
 #endif
-    
+
 #ifndef NO_GRID
-    plane_shader.load().attach(vertex_f(assets / "grid.vert.glsl"),
-                               fragment_f(assets / "grid.frag.glsl"))
-    .link()
-    .done();
-    
-    plane_model = glm::scale(glm::rotate(plane_model, glm::radians(90.f), glm::vec3(1.f, 0.f, 0.f)), glm::vec3(10.f, 10.f, 0.f));
+		plane_shader.load().attach(vertex_f(assets / "grid.vert.glsl"),
+				fragment_f(assets / "grid.frag.glsl"))
+			.link()
+			.done();
+
+		plane_model = glm::scale(glm::rotate(plane_model, glm::radians(90.f), glm::vec3(1.f, 0.f, 0.f)), glm::vec3(10.f, 10.f, 0.f));
 #endif
-    
+
 #ifndef NO_INFO
-    info_shader.load().attach(vertex_f(assets / "font.vert.glsl"),
-                              fragment_f(assets / "font.frag.glsl"))
-    .link()
-    .done();
+		info_shader.load().attach(vertex_f(assets / "font.vert.glsl"),
+				fragment_f(assets / "font.frag.glsl"))
+			.link()
+			.done();
 #endif
 
 		init();
@@ -321,25 +321,25 @@ public:
 			glClear(c.clear_buffer_bit);
 
 			render(std::chrono::duration_cast<std::chrono::duration<float>>(std::chrono::high_resolution_clock::now() + frame_rate - next_tick).count() / frame_rate_c);
-      
+
 #ifndef NO_GRID
-      plane_shader.use([&]() {
-        set_mvp(plane_model, view, proj);
-        set_uniform<float>("iResolution", window.bounds.x, window.bounds.y);
-        glBindVertexArray(plane_VAO);
-        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-      });
+			plane_shader.use([&]() {
+					set_mvp(plane_model, view, proj);
+					set_uniform<float>("iResolution", window.bounds.x, window.bounds.y);
+					glBindVertexArray(plane_VAO);
+					glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+			});
 #endif
-      
+
 #ifndef NO_INFO
-      info_shader.use([&]() {
-        set_uniform<float>("iResolution", window.bounds.x, window.bounds.y);
-        set_uniform<float>("FPS", avg_fps);
-        glBindVertexArray(plane_VAO);
-        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-      });
+			info_shader.use([&]() {
+					set_uniform<float>("iResolution", window.bounds.x, window.bounds.y);
+					set_uniform<float>("FPS", avg_fps);
+					glBindVertexArray(plane_VAO);
+					glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+			});
 #endif
-      
+
 			SDL_GL_SwapWindow(window);
 
 			cur_frame_ticks++;
