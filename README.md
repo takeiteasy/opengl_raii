@@ -1,9 +1,4 @@
 # quick_gl
-quick and dirty opengl prototype
-
-With a grid and garbage collection for shaders/texture
-
-![screenshot](https://raw.githubusercontent.com/takeiteasy/quick_gl/master/screenshot.png)
 
 ## License
 

@@ -1,1 +1,0 @@
-c++ -std=c++1z test.cpp src/3rdparty/*.c -framework OpenGL -lSDL2 -lboost_system -lboost_filesystem
