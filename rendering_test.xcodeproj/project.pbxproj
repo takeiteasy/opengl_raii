@@ -11,8 +11,6 @@
 		6D7DC32B1F1B00FF00D4F3B7 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6D7DC32A1F1B00FF00D4F3B7 /* main.cpp */; };
 		6D7DC3351F1B012800D4F3B7 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6D7DC3321F1B010700D4F3B7 /* OpenGL.framework */; };
 		8891EFD61FB360D80025F678 /* libSDL2-2.0.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 8891EFD51FB360D70025F678 /* libSDL2-2.0.0.dylib */; };
-		8891EFD91FB360F40025F678 /* libboost_filesystem.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 8891EFD71FB360F30025F678 /* libboost_filesystem.dylib */; };
-		8891EFDA1FB360F40025F678 /* libboost_system.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 8891EFD81FB360F40025F678 /* libboost_system.dylib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -45,8 +43,7 @@
 		6DEACBBF1F1CA89D008B2306 /* helpers.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = helpers.hpp; sourceTree = "<group>"; };
 		6DF0EE8A1F312BB8009D7A11 /* camera.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = camera.hpp; sourceTree = "<group>"; };
 		8891EFD51FB360D70025F678 /* libSDL2-2.0.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libSDL2-2.0.0.dylib"; path = "../../../../../usr/local/Cellar/sdl2/2.0.6/lib/libSDL2-2.0.0.dylib"; sourceTree = "<group>"; };
-		8891EFD71FB360F30025F678 /* libboost_filesystem.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libboost_filesystem.dylib; path = ../../../../../usr/local/Cellar/boost/1.65.1/lib/libboost_filesystem.dylib; sourceTree = "<group>"; };
-		8891EFD81FB360F40025F678 /* libboost_system.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libboost_system.dylib; path = ../../../../../usr/local/Cellar/boost/1.65.1/lib/libboost_system.dylib; sourceTree = "<group>"; };
+		88E0E7C42020EE8000AEE98A /* filesystem.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = filesystem.hpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -54,8 +51,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8891EFD91FB360F40025F678 /* libboost_filesystem.dylib in Frameworks */,
-				8891EFDA1FB360F40025F678 /* libboost_system.dylib in Frameworks */,
 				8891EFD61FB360D80025F678 /* libSDL2-2.0.0.dylib in Frameworks */,
 				6D7DC3351F1B012800D4F3B7 /* OpenGL.framework in Frameworks */,
 			);
@@ -98,15 +93,16 @@
 			children = (
 				6D674FB71F1D80DE0082FEC2 /* base.hpp */,
 				6D2A883B1F1F00DB00E3A25E /* buffer.hpp */,
-				6D674FBE1F1DC0FA0082FEC2 /* inputs.hpp */,
+				6DF0EE8A1F312BB8009D7A11 /* camera.hpp */,
+				88E0E7C42020EE8000AEE98A /* filesystem.hpp */,
 				6DBF3EA51F1B110300568A0D /* gl.hpp */,
 				6DEACBBF1F1CA89D008B2306 /* helpers.hpp */,
+				6D674FBE1F1DC0FA0082FEC2 /* inputs.hpp */,
 				6D674FBF1F1DC0FA0082FEC2 /* keyboard.hpp */,
 				6D7DC32A1F1B00FF00D4F3B7 /* main.cpp */,
 				6D674FBD1F1DC0FA0082FEC2 /* mouse.hpp */,
 				6DBF3EA61F1B159B00568A0D /* shader.hpp */,
 				6D2A883C1F1F0EAE00E3A25E /* texture.hpp */,
-				6DF0EE8A1F312BB8009D7A11 /* camera.hpp */,
 			);
 			path = rendering_test;
 			sourceTree = "<group>";
@@ -114,8 +110,6 @@
 		6D7DC3311F1B010700D4F3B7 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				8891EFD71FB360F30025F678 /* libboost_filesystem.dylib */,
-				8891EFD81FB360F40025F678 /* libboost_system.dylib */,
 				8891EFD51FB360D70025F678 /* libSDL2-2.0.0.dylib */,
 				6D7DC3321F1B010700D4F3B7 /* OpenGL.framework */,
 			);

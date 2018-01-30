@@ -19,7 +19,7 @@
 #include <SDL2/SDL.h>
 #undef main
 #include <SDL2/SDL_opengl.h>
-#include <boost/filesystem.hpp>
+#include "filesystem.hpp"
 
 #include "inputs.hpp"
 #include "keyboard.hpp"
@@ -123,8 +123,6 @@ static auto init_check(const std::string& msg, bool ok) {
     throw std::runtime_error(SDL_GetError());
   }
 }
-
-typedef boost::filesystem::path fs;
   
 class base {
   std::shared_ptr<std::nullptr_t> sdl, ctx;
@@ -133,7 +131,7 @@ protected:
   std::shared_ptr<SDL_Window> window;
   int screen_width, screen_height;
   float avg_fps, fps, cur_frame_ticks = .0f;
-  boost::filesystem::path assets = boost::filesystem::current_path() / "assets";
+  path assets = path::getcwd() / "assets";
   bool quit = false;
   
   event_manager    events;

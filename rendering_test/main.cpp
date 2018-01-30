@@ -92,15 +92,15 @@ auto compute_quat_w(glm::quat& q) {
 }
 
 auto load_anim(std::map<std::string, md5_anim_t>& m) {}
-template<typename T=boost::filesystem::path, typename... Ts> auto load_anim(std::map<std::string, md5_anim_t>& m, const T& p, const Ts& ... ts) {
-  if (not boost::filesystem::exists(p) or not boost::filesystem::is_regular_file(p))
-    throw std::runtime_error(p.string());
+template<typename T=path, typename... Ts> auto load_anim(std::map<std::string, md5_anim_t>& m, const T& p, const Ts& ... ts) {
+  if (not p.exists() or not p.is_file())
+    throw std::runtime_error("md5anim path \"" + p.str() + "\" is not a file or doesn't exist");
   
-  std::unique_ptr<std::FILE, decltype(&std::fclose)> fp(std::fopen(p.string().c_str(), "r"), &std::fclose);
+  std::unique_ptr<std::FILE, decltype(&std::fclose)> fp(std::fopen(p.str().c_str(), "r"), &std::fclose);
   if (!fp)
-    throw std::runtime_error(p.string());
+    throw std::runtime_error("failed to load: \"" + p.str() + "\"");
   
-  std::string fname = p.filename().string();
+  std::string fname = p.filename();
   md5_anim_t* anim = &m[fname.substr(0, fname.find_last_of("."))];
   
   char buff[512];
@@ -228,13 +228,13 @@ template<typename T=boost::filesystem::path, typename... Ts> auto load_anim(std:
   load_anim(m, ts...);
 }
 
-template<typename... T, typename=boost::filesystem::path> auto load(md5_t& m, const boost::filesystem::path& p, const T& ... ts) {
-  if (not boost::filesystem::exists(p) or not boost::filesystem::is_regular_file(p))
-    throw std::runtime_error(p.string());
+template<typename... T, typename=path> auto load(md5_t& m, const path& p, const T& ... ts) {
+  if (not p.exists() or not p.is_file())
+    throw std::runtime_error("md5mesh path \"" + p.str() + "\" is not a file or doesn't exist");
   
-  std::unique_ptr<std::FILE, decltype(&std::fclose)> fp(std::fopen(p.string().c_str(), "r"), &std::fclose);
+  std::unique_ptr<std::FILE, decltype(&std::fclose)> fp(std::fopen(p.str().c_str(), "r"), &std::fclose);
   if (!fp)
-    throw std::runtime_error(p.string());
+    throw std::runtime_error(p.str());
   
   char buff[512];
   int version, curr_mesh = 0, num_joints, num_meshes;
@@ -283,7 +283,7 @@ template<typename... T, typename=boost::filesystem::path> auto load(md5_t& m, co
         if (std::strstr(buff, "shader ")) {
           const char* sub = std::strtok(buff, "\"");
           sub = std::strtok(nullptr, "\"");
-          load(mesh.texture, p.branch_path() / (std::string(sub) + ".tga"));
+          load(mesh.texture, p.parent_path() / (std::string(sub) + ".tga"));
         }
         else if (std::sscanf(buff, " numverts %d", &num_verts) == 1) {
           if (num_verts > 0)

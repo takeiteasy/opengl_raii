@@ -1,10 +1,22 @@
-//
-//  events.hpp
-//  twwfpdnutis
-//
-//  Created by George Watson on 07/05/2017.
-//
-//
+/*
+ This source file is part of sdlpp (C++ wrapper for SDL2)
+ Copyright (c) 2017 Anton Te
+ Permission is hereby granted, free of charge, to any person obtaining a copy
+ of this software and associated documentation files (the "Software"), to deal
+ in the Software without restriction, including without limitation the rights
+ to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ copies of the Software, and to permit persons to whom the Software is
+ furnished to do so, subject to the following conditions:
+ The above copyright notice and this permission notice shall be included in all
+ copies or substantial portions of the Software.
+ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ SOFTWARE.
+ */
 
 #ifndef inputs_h
 #define inputs_h
@@ -14,7 +26,6 @@
 
 #include <SDL2/SDL_events.h>
 
-/* Stolen from: https://github.com/antonte/sdlpp */
 class event_manager {
 #define SDL_EVENTS \
   EVENT(SDL_AUDIODEVICEADDED, audio_device_added, adevice); \

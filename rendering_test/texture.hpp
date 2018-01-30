@@ -9,8 +9,7 @@
 #ifndef texture_h
 #define texture_h
 
-#include <boost/filesystem/operations.hpp>
-#include <boost/filesystem/path.hpp>
+#include "filesystem.hpp"
 #include "gl.hpp"
 
 namespace helper {
@@ -50,17 +49,17 @@ void bind(texture_t& tex, const std::function<void()>& fn) {
   glBindTexture(GL_TEXTURE_2D, 0);
 }
 
-void load(texture_t& tex, const boost::filesystem::path& p) {
+void load(texture_t& tex, const path& p) {
   if (!tex)
     generate_texture(tex);
   
   bind(tex, [&]() {
-    if (not boost::filesystem::exists(p) or not boost::filesystem::is_regular_file(p))
-      throw std::runtime_error("texture path \"" + p.string() + "\" is not a file or doesn't exist");
+    if (not p.exists() or not p.is_file())
+      throw std::runtime_error("texture path \"" + p.str() + "\" is not a file or doesn't exist");
     
-    std::unique_ptr<std::FILE, decltype(&std::fclose)> fp(std::fopen(p.string().c_str(), "r"), &std::fclose);
+    std::unique_ptr<std::FILE, decltype(&std::fclose)> fp(std::fopen(p.str().c_str(), "r"), &std::fclose);
     if (!fp)
-      throw std::runtime_error(p.string());
+      throw std::runtime_error("failed to load: \"" + p.str() + "\"");
     
     char dummy;
     std::fseek(fp.get(), 4 * sizeof(char) + 4 * sizeof(short int), SEEK_SET);
@@ -95,7 +94,7 @@ void load(texture_t& tex, const boost::filesystem::path& p) {
         break;
       }
       default:
-        throw std::runtime_error("invalid BPP (" + std::to_string(tex.bpp) + ") for \"" + p.string() + "\"");
+        throw std::runtime_error("invalid BPP (" + std::to_string(tex.bpp) + ") for \"" + p.str() + "\"");
     }
     
     glGenerateMipmap(GL_TEXTURE_2D);
