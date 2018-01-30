@@ -11,8 +11,6 @@
 
 #include <boost/filesystem/operations.hpp>
 #include <boost/filesystem/path.hpp>
-#include "3rdparty/stb_image.h"
-
 #include "gl.hpp"
 
 namespace helper {
@@ -33,7 +31,7 @@ template <typename T1=GLenum, typename T2=GLint, typename ... Ts> auto create_sa
 }
 
 struct texture_t: public helper::gl::ptr_t<std::unique_ptr<GLuint, helper::gl::ptr_deleter_t<helper::gl::delete_texture>>> {
-  int w, h, c;
+  int w, h, bpp;
 };
 
 void generate_texture(texture_t& tex) {
@@ -60,25 +58,47 @@ void load(texture_t& tex, const boost::filesystem::path& p) {
     if (not boost::filesystem::exists(p) or not boost::filesystem::is_regular_file(p))
       throw std::runtime_error("texture path \"" + p.string() + "\" is not a file or doesn't exist");
     
-    unsigned char* data = stbi_load(p.string().c_str(), &tex.w, &tex.h, &tex.c, 0);
-    if (data == nullptr)
-      throw std::runtime_error("Failed to load " + p.string());
+    std::unique_ptr<std::FILE, decltype(&std::fclose)> fp(std::fopen(p.string().c_str(), "r"), &std::fclose);
+    if (!fp)
+      throw std::runtime_error(p.string());
     
-    GLenum format;
-    switch (tex.c) {
-      case 1:
-        format = GL_RED;
+    char dummy;
+    std::fseek(fp.get(), 4 * sizeof(char) + 4 * sizeof(short int), SEEK_SET);
+    std::fread(&tex.w,   sizeof(short), 1, fp.get());
+    std::fread(&tex.h,   sizeof(short), 1, fp.get());
+    std::fread(&tex.bpp, sizeof(char),  1, fp.get());
+    std::fread(&dummy,   sizeof(char),  1, fp.get());
+    
+    glPixelStorei(GL_PACK_ALIGNMENT, 1);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+    
+    auto data = std::shared_ptr<GLubyte>(static_cast<GLubyte*>(std::malloc(tex.w * tex.h * (tex.bpp / 8) * sizeof(GLubyte))), std::free);
+    switch(tex.bpp) {
+      case 24: {
+        for(int i = 0; i < (tex.w * tex.h); i++){
+          data.get()[i * 3 + 2] = std::fgetc(fp.get());
+          data.get()[i * 3 + 1] = std::fgetc(fp.get());
+          data.get()[i * 3 + 0] = std::fgetc(fp.get());
+        }
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, tex.w, tex.h, 0, GL_RGB, GL_UNSIGNED_BYTE, data.get());
         break;
-      case 4:
-        format = GL_RGBA;
+      }
+      case 32: {
+        for (int i = 0; i < (tex.w * tex.h); i++){
+          data.get()[i * 4 + 2] = std::fgetc(fp.get());
+          data.get()[i * 4 + 1] = std::fgetc(fp.get());
+          data.get()[i * 4 + 0] = std::fgetc(fp.get());
+          data.get()[i * 4 + 3] = std::fgetc(fp.get());
+        }
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, tex.w, tex.h, 0, GL_RGBA, GL_UNSIGNED_BYTE, data.get());
         break;
+      }
       default:
-        format = GL_RGB;
+        throw std::runtime_error("invalid BPP (" + std::to_string(tex.bpp) + ") for \"" + p.string() + "\"");
     }
     
-    glTexImage2D(GL_TEXTURE_2D, 0, format, tex.w, tex.h, 0, format, GL_UNSIGNED_BYTE, data);
-    
-    stbi_image_free(data);
+    glGenerateMipmap(GL_TEXTURE_2D);
   });
 }
 

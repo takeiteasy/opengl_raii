@@ -21,7 +21,7 @@
 #include <SDL2/SDL_opengl.h>
 #include <boost/filesystem.hpp>
 
-#include "events.hpp"
+#include "inputs.hpp"
 #include "keyboard.hpp"
 #include "mouse.hpp"
 #include "buffer.hpp"

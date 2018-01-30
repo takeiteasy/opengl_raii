@@ -11,7 +11,7 @@
 
 #include <array>
 
-#include "events.hpp"
+#include "inputs.hpp"
 
 enum keycode_t {
   KEY_UNKNOWN = SDL_SCANCODE_UNKNOWN,

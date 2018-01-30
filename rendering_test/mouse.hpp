@@ -14,7 +14,7 @@
 #include <SDL2/SDL_mouse.h>
 #include <glm/vec2.hpp>
 
-#include "events.hpp"
+#include "inputs.hpp"
 
 enum mousecode_t {
   MOUSE_LEFT	 = SDL_BUTTON_LEFT,

@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		6D15D0EF1F20906800DFCAC4 /* glad.c in Sources */ = {isa = PBXBuildFile; fileRef = 6D15D0EE1F20906800DFCAC4 /* glad.c */; };
-		6D15D0F51F20BE5200DFCAC4 /* stb_image.c in Sources */ = {isa = PBXBuildFile; fileRef = 6D15D0F31F20BE5200DFCAC4 /* stb_image.c */; };
 		6D7DC32B1F1B00FF00D4F3B7 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6D7DC32A1F1B00FF00D4F3B7 /* main.cpp */; };
 		6D7DC3351F1B012800D4F3B7 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6D7DC3321F1B010700D4F3B7 /* OpenGL.framework */; };
 		8891EFD61FB360D80025F678 /* libSDL2-2.0.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 8891EFD51FB360D70025F678 /* libSDL2-2.0.0.dylib */; };
@@ -32,13 +31,11 @@
 		6D15D0EE1F20906800DFCAC4 /* glad.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = glad.c; path = 3rdparty/glad.c; sourceTree = "<group>"; };
 		6D15D0F01F20907F00DFCAC4 /* glad.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = glad.h; path = 3rdparty/glad.h; sourceTree = "<group>"; };
 		6D15D0F11F20907F00DFCAC4 /* khrplatform.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = khrplatform.h; path = 3rdparty/khrplatform.h; sourceTree = "<group>"; };
-		6D15D0F31F20BE5200DFCAC4 /* stb_image.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = stb_image.c; path = 3rdparty/stb_image.c; sourceTree = "<group>"; };
-		6D15D0F41F20BE5200DFCAC4 /* stb_image.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = stb_image.h; path = 3rdparty/stb_image.h; sourceTree = "<group>"; };
 		6D2A883B1F1F00DB00E3A25E /* buffer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = buffer.hpp; sourceTree = "<group>"; };
 		6D2A883C1F1F0EAE00E3A25E /* texture.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = texture.hpp; sourceTree = "<group>"; };
 		6D674FB71F1D80DE0082FEC2 /* base.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = base.hpp; sourceTree = "<group>"; };
 		6D674FBD1F1DC0FA0082FEC2 /* mouse.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = mouse.hpp; sourceTree = "<group>"; };
-		6D674FBE1F1DC0FA0082FEC2 /* events.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = events.hpp; sourceTree = "<group>"; };
+		6D674FBE1F1DC0FA0082FEC2 /* inputs.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = inputs.hpp; sourceTree = "<group>"; };
 		6D674FBF1F1DC0FA0082FEC2 /* keyboard.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = keyboard.hpp; sourceTree = "<group>"; };
 		6D7DC3271F1B00FF00D4F3B7 /* rendering_test */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = rendering_test; sourceTree = BUILT_PRODUCTS_DIR; };
 		6D7DC32A1F1B00FF00D4F3B7 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
@@ -70,8 +67,6 @@
 		6D15D0F21F20908500DFCAC4 /* 3rdparty */ = {
 			isa = PBXGroup;
 			children = (
-				6D15D0F31F20BE5200DFCAC4 /* stb_image.c */,
-				6D15D0F41F20BE5200DFCAC4 /* stb_image.h */,
 				6D15D0F01F20907F00DFCAC4 /* glad.h */,
 				6D15D0F11F20907F00DFCAC4 /* khrplatform.h */,
 				6D15D0EE1F20906800DFCAC4 /* glad.c */,
@@ -103,7 +98,7 @@
 			children = (
 				6D674FB71F1D80DE0082FEC2 /* base.hpp */,
 				6D2A883B1F1F00DB00E3A25E /* buffer.hpp */,
-				6D674FBE1F1DC0FA0082FEC2 /* events.hpp */,
+				6D674FBE1F1DC0FA0082FEC2 /* inputs.hpp */,
 				6DBF3EA51F1B110300568A0D /* gl.hpp */,
 				6DEACBBF1F1CA89D008B2306 /* helpers.hpp */,
 				6D674FBF1F1DC0FA0082FEC2 /* keyboard.hpp */,
@@ -153,7 +148,7 @@
 		6D7DC31F1F1B00FF00D4F3B7 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0900;
+				LastUpgradeCheck = 0920;
 				ORGANIZATIONNAME = "Kirisame Marisa";
 				TargetAttributes = {
 					6D7DC3261F1B00FF00D4F3B7 = {
@@ -185,7 +180,6 @@
 			files = (
 				6D7DC32B1F1B00FF00D4F3B7 /* main.cpp in Sources */,
 				6D15D0EF1F20906800DFCAC4 /* glad.c in Sources */,
-				6D15D0F51F20BE5200DFCAC4 /* stb_image.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -212,6 +206,8 @@
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
 				CLANG_WARN_STRICT_PROTOTYPES = YES;
@@ -265,6 +261,8 @@
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
 				CLANG_WARN_STRICT_PROTOTYPES = YES;

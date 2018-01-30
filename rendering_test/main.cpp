@@ -47,6 +47,7 @@ struct md5_bbox_t {
 };
 
 struct md5_mesh_t {
+  texture_t texture;
   std::vector<md5_vertex_t> vertices;
   std::vector<md5_triangle_t> triangles;
   std::vector<md5_weight_t> weights;
@@ -104,35 +105,35 @@ template<typename T=boost::filesystem::path, typename... Ts> auto load_anim(std:
   
   char buff[512];
   int version, num_frames, num_joints, num_anim_comps, frame_index;
-  std::vector<joint_info_t> jointInfos;
+  std::vector<joint_info_t> joint_infos;
   std::vector<baseframe_joint_t> baseFrame;
   std::vector<float> anim_frame_data;
-  const auto get_line = std::bind(fgets, buff, sizeof(buff), fp.get());
+  const auto get_line = std::bind(std::fgets, buff, sizeof(buff), fp.get());
   
-  while (!feof(fp.get())) {
+  while (!std::feof(fp.get())) {
     get_line();
     
-    if (sscanf(buff, " MD5Version %d", &version) == 1) {
+    if (std::sscanf(buff, " MD5Version %d", &version) == 1) {
       if (version != 10)
         throw std::runtime_error("ERROR: Bad animation version");
     }
-    else if (sscanf(buff, " numFrames %d", &num_frames) == 1) {
+    else if (std::sscanf(buff, " numFrames %d", &num_frames) == 1) {
       if (num_frames > 0) {
         anim->frames.resize(num_frames);
         anim->bboxes.resize(num_frames);
       }
     }
-    else if (sscanf(buff, " numJoints %d", &num_joints) == 1) {
+    else if (std::sscanf(buff, " numJoints %d", &num_joints) == 1) {
       if (num_joints > 0) {
         for (int i = 0; i < num_frames; ++i)
           anim->frames[i].resize(num_joints);
         
-        jointInfos.resize(num_joints);
+        joint_infos.resize(num_joints);
         baseFrame.resize(num_joints);
       }
     }
-    else if (sscanf(buff, " frameRate %d", &anim->frame_rate) == 1) {}
-    else if (sscanf(buff, " numAnimatedComponents %d", &num_anim_comps) == 1) {
+    else if (std::sscanf(buff, " frameRate %d", &anim->frame_rate) == 1) {}
+    else if (std::sscanf(buff, " numAnimatedComponents %d", &num_anim_comps) == 1) {
       if (num_anim_comps > 0)
         anim_frame_data.resize(num_anim_comps);
     }
@@ -140,34 +141,34 @@ template<typename T=boost::filesystem::path, typename... Ts> auto load_anim(std:
       for (int i = 0; i < num_joints; ++i) {
         get_line();
         
-        sscanf(buff, " %s %d %d %d",
-               jointInfos[i].name,   &jointInfos[i].parent,
-               &jointInfos[i].flags, &jointInfos[i].start);
+        std::sscanf(buff, " %s %d %d %d",
+                    joint_infos[i].name,   &joint_infos[i].parent,
+                    &joint_infos[i].flags, &joint_infos[i].start);
       }
     }
-    else if (strncmp(buff, "bounds {", 8) == 0) {
+    else if (std::strncmp(buff, "bounds {", 8) == 0) {
       for (int i = 0; i < num_frames; ++i) {
         get_line();
         
-        sscanf(buff, " ( %f %f %f ) ( %f %f %f )",
-               &anim->bboxes[i].min.x, &anim->bboxes[i].min.y,
-               &anim->bboxes[i].min.z, &anim->bboxes[i].max.x,
-               &anim->bboxes[i].max.y, &anim->bboxes[i].max.z);
+        std::sscanf(buff, " ( %f %f %f ) ( %f %f %f )",
+                    &anim->bboxes[i].min.x, &anim->bboxes[i].min.y,
+                    &anim->bboxes[i].min.z, &anim->bboxes[i].max.x,
+                    &anim->bboxes[i].max.y, &anim->bboxes[i].max.z);
       }
     }
-    else if (strncmp(buff, "baseframe {", 10) == 0) {
+    else if (std::strncmp(buff, "baseframe {", 10) == 0) {
       for (int i = 0; i < num_joints; ++i) {
         get_line();
         
-        if (sscanf(buff, " ( %f %f %f ) ( %f %f %f )",
-                   &baseFrame[i].position.x,    &baseFrame[i].position.y,    &baseFrame[i].position.z,
-                   &baseFrame[i].orientation.x, &baseFrame[i].orientation.y, &baseFrame[i].orientation.z) == 6)
+        if (std::sscanf(buff, " ( %f %f %f ) ( %f %f %f )",
+                        &baseFrame[i].position.x,    &baseFrame[i].position.y,    &baseFrame[i].position.z,
+                        &baseFrame[i].orientation.x, &baseFrame[i].orientation.y, &baseFrame[i].orientation.z) == 6)
           compute_quat_w(baseFrame[i].orientation);
       }
     }
-    else if (sscanf(buff, " frame %d", &frame_index) == 1) {
+    else if (std::sscanf(buff, " frame %d", &frame_index) == 1) {
       for (int i = 0; i < num_anim_comps; ++i)
-        fscanf(fp.get(), "%f", &anim_frame_data[i]);
+        std::fscanf(fp.get(), "%f", &anim_frame_data[i]);
       
       for (int i = 0; i < num_joints; ++i) {
         const baseframe_joint_t& base_joint = baseFrame[i];
@@ -175,46 +176,50 @@ template<typename T=boost::filesystem::path, typename... Ts> auto load_anim(std:
         int j = 0;
         glm::vec3 posistion   = base_joint.position;
         glm::quat orientation = base_joint.orientation;
-        if (jointInfos[i].flags & 1) /* Tx */ {
-          posistion.x = anim_frame_data[jointInfos[i].start + j];
+        if (joint_infos[i].flags & 1) /* Tx */ {
+          posistion.x = anim_frame_data[joint_infos[i].start + j];
           ++j;
         }
         
-        if (jointInfos[i].flags & 2) /* Ty */ {
-          posistion.y = anim_frame_data[jointInfos[i].start + j];
+        if (joint_infos[i].flags & 2) /* Ty */ {
+          posistion.y = anim_frame_data[joint_infos[i].start + j];
           ++j;
         }
         
-        if (jointInfos[i].flags & 4) /* Tz */ {
-          posistion.z = anim_frame_data[jointInfos[i].start + j];
+        if (joint_infos[i].flags & 4) /* Tz */ {
+          posistion.z = anim_frame_data[joint_infos[i].start + j];
           ++j;
         }
         
-        if (jointInfos[i].flags & 8) /* Qx */ {
-          orientation.x = anim_frame_data[jointInfos[i].start + j];
+        if (joint_infos[i].flags & 8) /* Qx */ {
+          orientation.x = anim_frame_data[joint_infos[i].start + j];
           ++j;
         }
         
-        if (jointInfos[i].flags & 16) /* Qy */ {
-          orientation.y = anim_frame_data[jointInfos[i].start + j];
+        if (joint_infos[i].flags & 16) /* Qy */ {
+          orientation.y = anim_frame_data[joint_infos[i].start + j];
           ++j;
         }
         
-        if (jointInfos[i].flags & 32) /* Qz */ {
-          orientation.z = anim_frame_data[jointInfos[i].start + j];
+        if (joint_infos[i].flags & 32) /* Qz */ {
+          orientation.z = anim_frame_data[joint_infos[i].start + j];
           ++j;
         }
         
         compute_quat_w(orientation);
         
         struct md5_joint_t& this_joint = anim->frames[frame_index][i];
-        this_joint.parent = jointInfos[i].parent;
-        std::strcpy(this_joint.name, jointInfos[i].name);
+        this_joint.parent = joint_infos[i].parent;
+        std::strcpy(this_joint.name, joint_infos[i].name);
         
         if (this_joint.parent < 0) {
           this_joint.position = posistion;
           this_joint.orientation = orientation;
         } else {
+          struct md5_joint_t& parent_joint = anim->frames[frame_index][joint_infos[i].parent];
+          glm::quat tmp = (parent_joint.orientation * posistion) * glm::normalize(glm::inverse(parent_joint.orientation));
+          this_joint.position = glm::vec3(tmp.x, tmp.y, tmp.z) + parent_joint.position;
+          this_joint.orientation = glm::normalize(parent_joint.orientation * orientation);
         }
       }
     }
@@ -233,36 +238,36 @@ template<typename... T, typename=boost::filesystem::path> auto load(md5_t& m, co
   
   char buff[512];
   int version, curr_mesh = 0, num_joints, num_meshes;
-  const auto get_line = std::bind(fgets, buff, sizeof(buff), fp.get());
+  const auto get_line = std::bind(std::fgets, buff, sizeof(buff), fp.get());
   
-  while (!feof(fp.get())) {
+  while (!std::feof(fp.get())) {
     get_line();
     
-    if (sscanf(buff, " MD5Version %d", &version) == 1) {
+    if (std::sscanf(buff, " MD5Version %d", &version) == 1) {
       if (version != 10)
         throw std::runtime_error("ERROR: Bad model version");
     }
-    else if (sscanf(buff, " numJoints %d", &num_joints) == 1) {
+    else if (std::sscanf(buff, " numJoints %d", &num_joints) == 1) {
       if (num_joints > 0)
         m.base_skel.resize(num_joints);
     }
-    else if (sscanf(buff, " numMeshes %d", &num_meshes) == 1) {
+    else if (std::sscanf(buff, " numMeshes %d", &num_meshes) == 1) {
       if (num_meshes > 0)
         m.meshes.resize(num_meshes);
     }
-    else if (strncmp(buff, "joints {", 8) == 0) {
+    else if (std::strncmp(buff, "joints {", 8) == 0) {
       for (int i = 0; i < num_joints; ++i) {
         md5_joint_t* joint = &m.base_skel[i];
         
         get_line();
-        if (sscanf(buff, "%s %d ( %f %f %f ) ( %f %f %f )",
-                   joint->name, &joint->parent,
-                   &joint->position[0], &joint->position[1], &joint->position[2],
-                   &joint->orientation[0], &joint->orientation[1], &joint->orientation[2]) == 8)
+        if (std::sscanf(buff, "%s %d ( %f %f %f ) ( %f %f %f )",
+                         joint->name, &joint->parent,
+                         &joint->position[0], &joint->position[1], &joint->position[2],
+                         &joint->orientation[0], &joint->orientation[1], &joint->orientation[2]) == 8)
           compute_quat_w(joint->orientation);
       }
     }
-    else if (strncmp(buff, "mesh {", 6) == 0) {
+    else if (std::strncmp(buff, "mesh {", 6) == 0) {
       md5_mesh_t& mesh = m.meshes[curr_mesh];
       
       int num_verts, num_tris, num_weights;
@@ -272,42 +277,42 @@ template<typename... T, typename=boost::filesystem::path> auto load(md5_t& m, co
       float fdata[4];
       int idata[3];
       
-      while ((buff[0] != '}') && !feof(fp.get())) {
+      while ((buff[0] != '}') && !std::feof(fp.get())) {
         get_line();
         
-        if (strstr(buff, "shader ")) {
+        if (std::strstr(buff, "shader ")) {
           const char* sub = std::strtok(buff, "\"");
           sub = std::strtok(nullptr, "\"");
-          std::printf("%s\n", sub);
+          load(mesh.texture, p.branch_path() / (std::string(sub) + ".tga"));
         }
-        else if (sscanf(buff, " numverts %d", &num_verts) == 1) {
+        else if (std::sscanf(buff, " numverts %d", &num_verts) == 1) {
           if (num_verts > 0)
             mesh.vertices.resize(num_verts);
         }
-        else if (sscanf(buff, " numtris %d", &num_tris) == 1) {
+        else if (std::sscanf(buff, " numtris %d", &num_tris) == 1) {
           if (num_tris > 0)
             mesh.triangles.resize(num_tris);
         }
-        else if (sscanf (buff, " numweights %d", &num_weights) == 1) {
+        else if (std::sscanf(buff, " numweights %d", &num_weights) == 1) {
           if (num_weights > 0)
             mesh.weights.resize(num_weights);
         }
-        else if (sscanf(buff, " vert %d ( %f %f ) %d %d", &vert_index,
-                        &fdata[0], &fdata[1], &idata[0], &idata[1]) == 5) {
+        else if (std::sscanf(buff, " vert %d ( %f %f ) %d %d", &vert_index,
+                             &fdata[0], &fdata[1], &idata[0], &idata[1]) == 5) {
           mesh.vertices[vert_index].st.x  = fdata[0];
           mesh.vertices[vert_index].st.y  = fdata[1];
           mesh.vertices[vert_index].start = idata[0];
           mesh.vertices[vert_index].count = idata[1];
         }
-        else if (sscanf(buff, " tri %d %d %d %d", &tri_index,
-                        &idata[0], &idata[1], &idata[2]) == 4) {
+        else if (std::sscanf(buff, " tri %d %d %d %d", &tri_index,
+                             &idata[0], &idata[1], &idata[2]) == 4) {
           mesh.triangles[tri_index].index[X] = idata[0];
           mesh.triangles[tri_index].index[Y] = idata[1];
           mesh.triangles[tri_index].index[Z] = idata[2];
         }
-        else if (sscanf(buff, " weight %d %d %f ( %f %f %f )",
-                        &weight_index, &idata[0], &fdata[3],
-                        &fdata[0], &fdata[1], &fdata[2]) == 6) {
+        else if (std::sscanf(buff, " weight %d %d %f ( %f %f %f )",
+                             &weight_index, &idata[0], &fdata[3],
+                             &fdata[0], &fdata[1], &fdata[2]) == 6) {
           mesh.weights[weight_index].joint = idata[0];
           mesh.weights[weight_index].bias = fdata[3];
           mesh.weights[weight_index].position = glm::vec3(fdata[0], fdata[1], fdata[2]);
@@ -320,11 +325,14 @@ template<typename... T, typename=boost::filesystem::path> auto load(md5_t& m, co
         vertex_t& vert = tmp_verts[i];
         md5_vertex_t& old_vert = mesh.vertices[i];
         int count = old_vert.count;
-        for (int j = 0; j < (count > 3 ? 3 : count); ++j) {
+        for (int j = 0; j < count; ++j) {
+          if (j >= 4)
+            break;
+          
           md5_weight_t& weight = mesh.weights[old_vert.start + j];
           md5_joint_t&  joint  = m.base_skel[weight.joint];
           
-          vert.position  += (joint.position + (joint.orientation * weight.position)) * weight.bias;
+          vert.position  += (joint.position + joint.orientation * weight.position) * weight.bias;
           vert.indices[j] = static_cast<float>(weight.joint);
           vert.weights[j] = weight.bias;
         }
@@ -378,10 +386,12 @@ template<typename... T, typename=boost::filesystem::path> auto load(md5_t& m, co
 }
 
 void draw(md5_mesh_t& mesh) {
-  glBindVertexArray(mesh.VAO);
-  glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh.EBO);
-  glDrawElements(GL_TRIANGLES, static_cast<int>(mesh.triangles.size()) * 3, GL_UNSIGNED_INT, 0);
-  glBindVertexArray(0);
+  bind(mesh.texture, [&mesh]() {
+    set_uniform<int>("texture_diffuse", 0);
+    glBindVertexArray(mesh.VAO);
+    glDrawElements(GL_TRIANGLES, static_cast<int>(mesh.triangles.size()) * 3, GL_UNSIGNED_INT, 0);
+    glBindVertexArray(0);
+  });
 }
 
 void draw(md5_t& model) {
@@ -396,7 +406,7 @@ class game: public base {
   
 public:
   void init() {
-    assets = "/Users/roryb/Dropbox/git/rendering_test/res";
+    assets = "/Users/roryb/Documents/git/quick_gl/res";
     
     SDL_ShowCursor(SDL_DISABLE);
     SDL_SetRelativeMouseMode(SDL_TRUE);
@@ -405,7 +415,7 @@ public:
     
     load(test, assets / "test.vert.glsl", assets / "test.frag.glsl");
     
-    load(model, assets / "bob_lamp_update_export.md5mesh", assets / "bob_lamp_update_export.md5anim");
+    load(model, assets / "bob_lamp_update.md5mesh", assets / "bob_lamp_update.md5anim");
     
     printf("");
   }
