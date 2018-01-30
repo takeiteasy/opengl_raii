@@ -51,7 +51,8 @@ struct md5_mesh_t {
   std::vector<md5_vertex_t> vertices;
   std::vector<md5_triangle_t> triangles;
   std::vector<md5_weight_t> weights;
-  GLuint VAO, VBO, EBO;
+  vertex_array_t VAO;
+  buffer_t VBO, EBO;
 };
 
 struct joint_info_t {
@@ -351,32 +352,25 @@ template<typename... T, typename=path> auto load(md5_t& m, const path& p, const 
       for (auto& v: tmp_verts)
         v.normal = glm::normalize(v.normal);
       
-      glGenVertexArrays(1, &mesh.VAO);
-      glGenBuffers(1, &mesh.VBO);
-      glGenBuffers(1, &mesh.EBO);
+      generate_vertex_array(mesh.VAO);
+      generate_array_buffer(mesh.VBO);
+      generate_array_buffer(mesh.EBO);
       
-      glBindVertexArray(mesh.VAO);
-      
-      glBindBuffer(GL_ARRAY_BUFFER, mesh.VBO);
-      glBufferData(GL_ARRAY_BUFFER, tmp_verts.size() * sizeof(vertex_t), &tmp_verts[0], GL_STATIC_DRAW);
-      
-      glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh.EBO);
-      glBufferData(GL_ELEMENT_ARRAY_BUFFER, mesh.triangles.size() * 3 * sizeof(md5_triangle_t), &mesh.triangles[0], GL_STATIC_DRAW);
-      
-      glEnableVertexAttribArray(0);
-      glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(vertex_t), (void*)0);
-      glEnableVertexAttribArray(1);
-      glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(vertex_t), (void*)offsetof(vertex_t, normal));
-      glEnableVertexAttribArray(2);
-      glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(vertex_t), (void*)offsetof(vertex_t, uv));
-      glEnableVertexAttribArray(3);
-      glVertexAttribPointer(3, 4, GL_FLOAT, GL_FALSE, sizeof(vertex_t), (void*)offsetof(vertex_t, weights));
-      glEnableVertexAttribArray(4);
-      glVertexAttribPointer(4, 4, GL_FLOAT, GL_FALSE, sizeof(vertex_t), (void*)offsetof(vertex_t, indices));
-      
-      glBindVertexArray(0);
-      glBindBuffer(GL_ARRAY_BUFFER, 0);
-      glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+      bind(mesh.VAO, [&]() {
+        bind_data<vertex_t, GL_ARRAY_BUFFER>(mesh.VBO, tmp_verts);
+        bind_data<md5_triangle_t, GL_ELEMENT_ARRAY_BUFFER>(mesh.EBO, mesh.triangles);
+        
+        glEnableVertexAttribArray(0);
+        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(vertex_t), (void*)0);
+        glEnableVertexAttribArray(1);
+        glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(vertex_t), (void*)offsetof(vertex_t, normal));
+        glEnableVertexAttribArray(2);
+        glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(vertex_t), (void*)offsetof(vertex_t, uv));
+        glEnableVertexAttribArray(3);
+        glVertexAttribPointer(3, 4, GL_FLOAT, GL_FALSE, sizeof(vertex_t), (void*)offsetof(vertex_t, weights));
+        glEnableVertexAttribArray(4);
+        glVertexAttribPointer(4, 4, GL_FLOAT, GL_FALSE, sizeof(vertex_t), (void*)offsetof(vertex_t, indices));
+      });
       
       curr_mesh++;
     }
@@ -388,9 +382,9 @@ template<typename... T, typename=path> auto load(md5_t& m, const path& p, const 
 void draw(md5_mesh_t& mesh) {
   bind(mesh.texture, [&mesh]() {
     set_uniform<int>("texture_diffuse", 0);
-    glBindVertexArray(mesh.VAO);
-    glDrawElements(GL_TRIANGLES, static_cast<int>(mesh.triangles.size()) * 3, GL_UNSIGNED_INT, 0);
-    glBindVertexArray(0);
+    bind(mesh.VAO, [&mesh]() {
+      glDrawElements(GL_TRIANGLES, static_cast<int>(mesh.triangles.size()) * 3, GL_UNSIGNED_INT, 0);
+    });
   });
 }
 
@@ -416,8 +410,6 @@ public:
     load(test, assets / "test.vert.glsl", assets / "test.frag.glsl");
     
     load(model, assets / "bob_lamp_update.md5mesh", assets / "bob_lamp_update.md5anim");
-    
-    printf("");
   }
   
   void tick() {

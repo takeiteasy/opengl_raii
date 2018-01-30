@@ -1,6 +1,7 @@
 /*
  This source file is part of sdlpp (C++ wrapper for SDL2)
  Copyright (c) 2017 Anton Te
+ 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
  in the Software without restriction, including without limitation the rights
