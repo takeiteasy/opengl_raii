@@ -65,4 +65,9 @@ template<typename T, GLenum TYPE> auto bind_data(buffer_t& vbo, const std::vecto
   glBufferData(TYPE, data.size() * sizeof(T) * (size ? size : 1), &data[0], GL_STATIC_DRAW);
 }
 
+template<typename T, GLenum TYPE> auto bind_sub_data(buffer_t& vbo, const std::vector<T>& data, size_t size = 0) {
+  bind<TYPE>(vbo);
+  glBufferSubData(TYPE, 0, data.size() * sizeof(T) * (size ? size : 1), &data[0]);
+}
+
 #endif /* buffer_h */
