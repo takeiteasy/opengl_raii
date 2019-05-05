@@ -30,9 +30,8 @@ enum mousecode_t {
 };
 
 class mouse_manager {
-  std::array<bool,     10> state		 = { { false } };
-  std::array<uint32_t, 10> down_tick = { { 0 } },
-                           up_tick	 = { { 0 } };
+  std::array<bool, 10> state = { { false } };
+  std::array<unsigned int, 10> down_tick = { { 0 } }, up_tick = { { 0 } };
   glm::vec2 _pos, _rel, _wheel;
   bool inverted_y = false;
   

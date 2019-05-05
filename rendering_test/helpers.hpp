@@ -9,9 +9,9 @@
 #ifndef helpers_h
 #define helpers_h
 
-#include "filesystem.hpp"
+#include "3rdparty/filesystem.hpp"
 
-std::string __load_file_to_mem(const path& p) {
+std::string load_file_to_mem(const path& p) {
   if (not p.exists() or not p.is_file())
     throw std::runtime_error("path \"" + p.str() + "\" is not a file or doesn't exist");
   

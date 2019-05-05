@@ -134,9 +134,9 @@ auto load(shader_t& s, const char* vert, const char* frag, const char* geom = nu
 }
 
 auto load(shader_t& s, const path& vert, const path& frag, const path& geom = path()) {
-  std::string v = __load_file_to_mem(vert);
-  std::string f = __load_file_to_mem(frag);
-  std::string g = (!geom.str().empty() ? __load_file_to_mem(geom) : "");
+  std::string v = load_file_to_mem(vert);
+  std::string f = load_file_to_mem(frag);
+  std::string g = (!geom.str().empty() ? load_file_to_mem(geom) : "");
   
   load(s, v.c_str(), f.c_str(), (g.empty() ? nullptr : g.c_str()));
 }

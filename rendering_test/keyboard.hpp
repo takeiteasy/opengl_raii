@@ -258,9 +258,8 @@ enum keycode_t {
 };
 
 class keyboard_manager {
-  std::array<bool,     SDL_NUM_SCANCODES> state     = { { false } };
-  std::array<uint32_t, SDL_NUM_SCANCODES> down_tick = { { 0 } },
-                                          up_tick   = { { 0 } };
+  std::array<bool, SDL_NUM_SCANCODES> state = { { false } };
+  std::array<unsigned int, SDL_NUM_SCANCODES> down_tick = { { 0 } }, up_tick = { { 0 } };
   
 public:
   void link_event_manager(event_manager& em) {

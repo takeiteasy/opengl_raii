@@ -19,7 +19,7 @@
 #include <SDL2/SDL.h>
 #undef main
 #include <SDL2/SDL_opengl.h>
-#include "filesystem.hpp"
+#include "3rdparty/filesystem.hpp"
 
 #include "inputs.hpp"
 #include "keyboard.hpp"

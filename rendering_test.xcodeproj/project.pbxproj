@@ -11,6 +11,10 @@
 		6D7DC32B1F1B00FF00D4F3B7 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6D7DC32A1F1B00FF00D4F3B7 /* main.cpp */; };
 		6D7DC3351F1B012800D4F3B7 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6D7DC3321F1B010700D4F3B7 /* OpenGL.framework */; };
 		8891EFD61FB360D80025F678 /* libSDL2-2.0.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 8891EFD51FB360D70025F678 /* libSDL2-2.0.0.dylib */; };
+		88EE8BCD227F876700856542 /* libSDL2_ttf-2.0.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 88EE8BC9227F876700856542 /* libSDL2_ttf-2.0.0.dylib */; };
+		88EE8BCE227F876700856542 /* libSDL2_mixer-2.0.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 88EE8BCA227F876700856542 /* libSDL2_mixer-2.0.0.dylib */; };
+		88EE8BCF227F876700856542 /* libSDL2_image-2.0.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 88EE8BCB227F876700856542 /* libSDL2_image-2.0.0.dylib */; };
+		88EE8BD0227F876700856542 /* libSDL2_net-2.0.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 88EE8BCC227F876700856542 /* libSDL2_net-2.0.0.dylib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -43,7 +47,11 @@
 		6DEACBBF1F1CA89D008B2306 /* helpers.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = helpers.hpp; sourceTree = "<group>"; };
 		6DF0EE8A1F312BB8009D7A11 /* camera.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = camera.hpp; sourceTree = "<group>"; };
 		8891EFD51FB360D70025F678 /* libSDL2-2.0.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libSDL2-2.0.0.dylib"; path = "../../../../../usr/local/Cellar/sdl2/2.0.6/lib/libSDL2-2.0.0.dylib"; sourceTree = "<group>"; };
-		88E0E7C42020EE8000AEE98A /* filesystem.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = filesystem.hpp; sourceTree = "<group>"; };
+		88EE8BC8227F860900856542 /* filesystem.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = filesystem.hpp; path = 3rdparty/filesystem.hpp; sourceTree = "<group>"; };
+		88EE8BC9227F876700856542 /* libSDL2_ttf-2.0.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libSDL2_ttf-2.0.0.dylib"; path = "../../../../usr/local/Cellar/sdl2_ttf/2.0.14/lib/libSDL2_ttf-2.0.0.dylib"; sourceTree = "<group>"; };
+		88EE8BCA227F876700856542 /* libSDL2_mixer-2.0.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libSDL2_mixer-2.0.0.dylib"; path = "../../../../usr/local/Cellar/sdl2_mixer/2.0.4/lib/libSDL2_mixer-2.0.0.dylib"; sourceTree = "<group>"; };
+		88EE8BCB227F876700856542 /* libSDL2_image-2.0.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libSDL2_image-2.0.0.dylib"; path = "../../../../usr/local/Cellar/sdl2_image/2.0.4/lib/libSDL2_image-2.0.0.dylib"; sourceTree = "<group>"; };
+		88EE8BCC227F876700856542 /* libSDL2_net-2.0.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libSDL2_net-2.0.0.dylib"; path = "../../../../usr/local/Cellar/sdl2_net/2.0.1/lib/libSDL2_net-2.0.0.dylib"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -51,6 +59,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				88EE8BCD227F876700856542 /* libSDL2_ttf-2.0.0.dylib in Frameworks */,
+				88EE8BCE227F876700856542 /* libSDL2_mixer-2.0.0.dylib in Frameworks */,
+				88EE8BCF227F876700856542 /* libSDL2_image-2.0.0.dylib in Frameworks */,
+				88EE8BD0227F876700856542 /* libSDL2_net-2.0.0.dylib in Frameworks */,
 				8891EFD61FB360D80025F678 /* libSDL2-2.0.0.dylib in Frameworks */,
 				6D7DC3351F1B012800D4F3B7 /* OpenGL.framework in Frameworks */,
 			);
@@ -62,6 +74,7 @@
 		6D15D0F21F20908500DFCAC4 /* 3rdparty */ = {
 			isa = PBXGroup;
 			children = (
+				88EE8BC8227F860900856542 /* filesystem.hpp */,
 				6D15D0F01F20907F00DFCAC4 /* glad.h */,
 				6D15D0F11F20907F00DFCAC4 /* khrplatform.h */,
 				6D15D0EE1F20906800DFCAC4 /* glad.c */,
@@ -94,7 +107,6 @@
 				6D674FB71F1D80DE0082FEC2 /* base.hpp */,
 				6D2A883B1F1F00DB00E3A25E /* buffer.hpp */,
 				6DF0EE8A1F312BB8009D7A11 /* camera.hpp */,
-				88E0E7C42020EE8000AEE98A /* filesystem.hpp */,
 				6DBF3EA51F1B110300568A0D /* gl.hpp */,
 				6DEACBBF1F1CA89D008B2306 /* helpers.hpp */,
 				6D674FBE1F1DC0FA0082FEC2 /* inputs.hpp */,
@@ -110,6 +122,10 @@
 		6D7DC3311F1B010700D4F3B7 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				88EE8BCB227F876700856542 /* libSDL2_image-2.0.0.dylib */,
+				88EE8BCA227F876700856542 /* libSDL2_mixer-2.0.0.dylib */,
+				88EE8BCC227F876700856542 /* libSDL2_net-2.0.0.dylib */,
+				88EE8BC9227F876700856542 /* libSDL2_ttf-2.0.0.dylib */,
 				8891EFD51FB360D70025F678 /* libSDL2-2.0.0.dylib */,
 				6D7DC3321F1B010700D4F3B7 /* OpenGL.framework */,
 			);
@@ -286,16 +302,15 @@
 		6D7DC32F1F1B00FF00D4F3B7 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CLANG_CXX_LANGUAGE_STANDARD = "c++14";
+				CLANG_CXX_LANGUAGE_STANDARD = "c++17";
 				HEADER_SEARCH_PATHS = /usr/local/include;
 				LIBRARY_SEARCH_PATHS = (
+					/usr/local/lib,
 					"$(inherited)",
-					/usr/local/Cellar/glfw/3.2.1/lib,
-					"/usr/local/Cellar/assimp/HEAD-123d06c/lib",
-					/usr/local/Cellar/sdl2/2.0.5/lib,
-					/usr/local/Cellar/boost/1.64.0_1/lib,
-					/usr/local/Cellar/sdl2/2.0.6/lib,
-					/usr/local/Cellar/boost/1.65.1/lib,
+					/usr/local/Cellar/sdl2_ttf/2.0.14/lib,
+					/usr/local/Cellar/sdl2_mixer/2.0.4/lib,
+					/usr/local/Cellar/sdl2_image/2.0.4/lib,
+					/usr/local/Cellar/sdl2_net/2.0.1/lib,
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
@@ -304,16 +319,15 @@
 		6D7DC3301F1B00FF00D4F3B7 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CLANG_CXX_LANGUAGE_STANDARD = "c++14";
+				CLANG_CXX_LANGUAGE_STANDARD = "c++17";
 				HEADER_SEARCH_PATHS = /usr/local/include;
 				LIBRARY_SEARCH_PATHS = (
+					/usr/local/lib,
 					"$(inherited)",
-					/usr/local/Cellar/glfw/3.2.1/lib,
-					"/usr/local/Cellar/assimp/HEAD-123d06c/lib",
-					/usr/local/Cellar/sdl2/2.0.5/lib,
-					/usr/local/Cellar/boost/1.64.0_1/lib,
-					/usr/local/Cellar/sdl2/2.0.6/lib,
-					/usr/local/Cellar/boost/1.65.1/lib,
+					/usr/local/Cellar/sdl2_ttf/2.0.14/lib,
+					/usr/local/Cellar/sdl2_mixer/2.0.4/lib,
+					/usr/local/Cellar/sdl2_image/2.0.4/lib,
+					/usr/local/Cellar/sdl2_net/2.0.1/lib,
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
