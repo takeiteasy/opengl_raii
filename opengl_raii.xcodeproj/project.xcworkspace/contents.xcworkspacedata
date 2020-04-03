@@ -2,6 +2,6 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "self:rendering_test.xcodeproj">
+      location = "self:opengl_raii.xcodeproj">
    </FileRef>
 </Workspace>
