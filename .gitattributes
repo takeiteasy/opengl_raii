@@ -1,1 +1,2 @@
-example/* linguist-vendored
+example/*.h linguist-vendored
+example/*.c linguist-vendored
