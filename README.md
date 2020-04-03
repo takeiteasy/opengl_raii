@@ -2,6 +2,8 @@
 
 Simple RAII wrapper for OpenGL objects. See ```example/main.cpp``` for how to use/extend.
 
+## Copyright
+
 ```
 Copyright 2020 Rory B. Bellows
 
